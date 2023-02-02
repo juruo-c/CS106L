@@ -28,7 +28,7 @@ DESTDIR = $$PWD/res
 
 # set up flags for the compiler and Stanford C++ libraries
 
-QMAKE_CXXFLAGS += -std=c++11 \
+QMAKE_CXXFLAGS += -std=c++17 \
 
     -Wall \
 

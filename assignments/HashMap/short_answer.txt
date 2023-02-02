@@ -1,0 +1,25 @@
+Assignment 2: STL HashMap (short answer questions)
+Names:
+
+1. Templates and Template Classes
+Q: In the rehash() function, the for-each loop contains an auto&.
+What is the deduced type of that auto, and why the ampersand necessary?
+A:
+
+2.
+
+3.
+
+4.
+
+5.
+
+6.
+
+7.
+
+8.
+
+9.
+
+10.

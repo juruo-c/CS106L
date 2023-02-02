@@ -14,7 +14,7 @@ using std::string;          using std::unordered_set;
 unordered_set<string> findWikiLinks(const string& page_html) {
     // TODO: delete this return statement and implement the
     //       function!
-    return {};
+    return {page_html};
 }
 
 int main() {
