@@ -207,11 +207,11 @@ template <typename K, typename M, typename H>
 
 template <typename K, typename M, typename H>
 void HashMap<K, M, H>::rehash(size_t new_bucket_count) {
-if (new_bucket_count == 0) {
-    throw std::out_of_range("HashMap<K, M, H>::rehash: new_bucket_count must be positive.");
-}
+    if (new_bucket_count == 0) {
+        throw std::out_of_range("HashMap<K, M, H>::rehash: new_bucket_count must be positive.");
+    }
 
-std::vector<node*> new_buckets_array(new_bucket_count);
+    std::vector<node*> new_buckets_array(new_bucket_count);
     for (auto& curr : _buckets_array) { // short answer question is asking about this 'curr'
         while (curr != nullptr) {
             const auto& [key, mapped] = curr->value;
@@ -230,7 +230,18 @@ std::vector<node*> new_buckets_array(new_bucket_count);
 
 // Milestone 2 (optional) - iterator-based constructors
 // You will have to type in your own function headers in both the .cpp and .h files.
+template <typename K, typename M, typename H>
+template <typename InputIt>
+HashMap<K, M, H>::HashMap(InputIt first, InputIt last, size_t bucket_count, const H& hash) :
+    HashMap(bucket_count, hash) {
+    for (; first != last; first ++ ) {
+        this->insert(*first);
+    }
+}
 
+template <typename K, typename M, typename H> 
+HashMap<K, M, H>::HashMap(std::initializer_list<value_type> init, size_t bucket_count, const H& hash) :
+    HashMap(init.begin(), init.end(), bucket_count, hash) {}
 
 // Milestone 3 (required) - operator overloading
 // The function headers are provided for you.
@@ -245,58 +256,116 @@ M& HashMap<K, M, H>::operator[](const K& key) {
      */
 
     // BEGIN STARTER CODE (remove these lines before you begin)
-    (void) key;
+//    (void) key;
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wreturn-stack-address"
+//#pragma GCC diagnostic push
+//#pragma GCC diagnostic ignored "-Wreturn-stack-address"
 
-    M trash; // trash lives on the stack
-    return trash; // return value is a reference to a variable that has been freed :(
+//    M trash; // trash lives on the stack
+//    return trash; // return value is a reference to a variable that has been freed :(
 
-#pragma GCC diagnostic pop
+//#pragma GCC diagnostic pop
 
     // END STARTER CODE
 
     // complete the function implementation (1 line of code)
     // isn't it funny how the bad starter code is longer than the correct answer?
+    return ((this->insert({key, {}})).first)->second;
 }
 
 template <typename K, typename M, typename H>
 bool operator==(const HashMap<K, M, H>& lhs, const HashMap<K, M, H>& rhs) {
 
     // BEGIN STARTER CODE (remove these lines before you begin)
-    (void) lhs, (void) rhs;
-    return true;
+//    (void) lhs, (void) rhs;
+//    return true;
     // END STARTER CODE
 
     // complete the function implementation (~4-5 lines of code)
+    if (&lhs == &rhs) return true;
+    if (lhs.size() != rhs.size()) return false;
+    for (auto& [key, value] : lhs)
+        if (!rhs.contains(key) || rhs.at(key) != value)
+            return false;
+    return true;
 }
 
 template <typename K, typename M, typename H>
 bool operator!=(const HashMap<K, M, H>& lhs, const HashMap<K, M, H>& rhs) {
 
     // BEGIN STARTER CODE (remove these lines before you begin)
-    (void) lhs, (void) rhs;
-    return true;
+//    (void) lhs, (void) rhs;
+//    return true;
     // END STARTER CODE
 
     // complete the function implementation (1 line of code)
+    return !(lhs == rhs);
 }
 
 template <typename K, typename M, typename H>
 std::ostream& operator<<(std::ostream& os, const HashMap<K, M, H>& rhs) {
 
     // BEGIN STARTER CODE (remove these lines before you begin)
-    (void) rhs;
-    return os;
+//    (void) rhs;
+//    return os;
     // END STARTER CODE
 
     // complete the function implementation (~7 lines of code)
+    std::stringstream toString;
+    toString << "{";
+    for (auto& [key, value] : rhs) toString << key << ":" << value << ", ";
+    std::string res = toString.str();
+    if (!rhs.empty()) res.pop_back(), res.pop_back();
+    os << res + "}";
+    return os;
 }
 
 // Milestone 4 (required) - special member functions
 // You will have to type in your own function headers in both the .cpp and .h files.
 
 // provide the function headers and implementations (~35 lines of code)
+template <typename K, typename M, typename H>
+HashMap<K, M, H>::HashMap(const HashMap<K, M, H>& other) : HashMap(other._buckets_array.size(), other._hash_function){
+    for (auto& [key, value] : other) insert({key, value});
+}
+
+template <typename K, typename M, typename H>
+HashMap<K, M, H>& HashMap<K, M, H>::operator=(const HashMap<K, M, H>& other) {
+    if (&other == this) return *this;
+    clear();
+    _hash_function = other._hash_function;
+    _buckets_array.resize(other._buckets_array.size());
+    for (auto& [key, value] : other) insert({key, value});
+    return *this;
+}
+
+template <typename K, typename M, typename H>
+HashMap<K, M, H>::HashMap(HashMap<K, M, H>&& other) :
+    _size{std::move(other._size)},
+    _hash_function{std::move(other._hash_function)},
+    _buckets_array{other.bucket_count(), nullptr} {
+    for (int i = 0; i < other.bucket_count(); i ++ ) {
+        _buckets_array[i] = std::move(other._buckets_array[i]);
+        other._buckets_array[i] = nullptr;
+    }
+    other._size = 0;
+}
+
+template <typename K, typename M, typename H>
+HashMap<K, M, H>& HashMap<K, M, H>::operator=(HashMap<K, M, H>&& other) {
+    if (&other == this) return *this;
+
+    clear();
+    _size = std::move(other._size);
+    _hash_function = std::move(other._hash_function);
+    _buckets_array.resize(other._buckets_array.size());
+    for (int i = 0; i < other.bucket_count(); i ++ ) {
+        _buckets_array[i] = std::move(other._buckets_array[i]);
+        other._buckets_array[i] = nullptr;
+    }
+    other._size = 0;
+
+    return *this;
+}
 
 /* end student code */

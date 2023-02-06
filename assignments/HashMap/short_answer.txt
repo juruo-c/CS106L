@@ -4,22 +4,62 @@ Names:
 1. Templates and Template Classes
 Q: In the rehash() function, the for-each loop contains an auto&.
 What is the deduced type of that auto, and why the ampersand necessary?
+A: The deduced type of auto is node*; the ampersand is necessary because it can move the bucket's head and the curr at the same time.
+
+2. HashMap Pair Type
+Q: STL containers store elements of type value_type, and for your HashMap this value_type is a std::pair<const K, M>. 
+   What would be the problem in the HashMap class if value_type were instead std::pair<K, M>?
+A: If the value_type is std::pair<K, M>, that means the key of each entry in the HashMap can be change.
+   eg:
+    HashMap<std::string, int> map;
+    map.insert({"Avery", 3});
+    auto iter = map.begin();
+    iter->first = "Anna";
+    auto anna_iter = map.find("Anna");
+   But we don't want to make keys modifiable.
+
+3. Find vs. 𝓕𝓲𝓷𝓭
+Q: In addition to the HashMap::find member function, there is also a std::find function in the STL algorithms library. 
+   If you were searching for key k in HashMap m, is it preferable to call m.find(k) or std::find(m.begin(), m.end(), k)?
+A: It is preferable to call m.find(k), because its Big-O complexity is O(1) while that of std::find(m.begin(), m.end(), k) is O(n).
+   Where the n is the number of entry in the HashMap.
+
+4. RAII?
+Q: This HashMap class is RAII-compliant. Explain why. 
+A: Because the destructor wiil call clear() which free all the resources that HashMap acquires.
+
+5. privacy
+Q: Why is the HashMapIterator's constructor private? How do HashMapIterators get constructed if the constructor is private?
+A: Because the constructor need to have access to the private members of HashMap; HashMapIterators can get constructed by HashMap because 
+   they are friend to each other.
+
+6. Increments
+Q: Briefly explain the implementation of HashMapIterator's operator++, 
+   which we provide for you. How does it work and what checks does it have?
+A: For the prefix ++, the code first move the node pointer to the next node; then check if the node pointer is null. If the node pointer is null, 
+   it means you reach the end of the bucket and need to find the next bucket(not empty). Finally, return the object itself.
+   For the postfix ++, the code first copy the object, and call prefix ++ to move the node pointer, then return the copy of this object.
+
+7. Did We Make a Mistake?
+Q: Why is there both a const and non-const version of at(),
+   but only a non-const version of operator[]?
+   (unlike in Vector where operator[] also had a const version).
+A: Because when we use operator[] to get the mapping value of the specific key and the key has
+   not been in the HashMap, the operator will add the mapping with default value to the HashMap.
+   This will change the HashMap, so the operator[] in here does not need to have a const version.
+
+8. Now Streaming on iTunes
+Q: Look at the function signature for the stream insertion (operator<<) in hashmap.cpp.
+   Briefly explain the syntax for this function signature and how this works.
 A:
 
-2.
+9. Attachment Issues
+Q: Why is it that we need to implement the special member functions in the HashMap class,
+   but we can default all the special member functions in the HashMapIterator class?
+A:
 
-3.
-
-4.
-
-5.
-
-6.
-
-7.
-
-8.
-
-9.
-
-10.
+10. Move Semantics
+Q: In your move constructor or move assignment operator,
+   why did you have to std::move each member,
+   even though the parameter (named rhs) is already an r-value reference?
+A:

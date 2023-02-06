@@ -1,7 +1,7 @@
 QT -= gui
 
 CONFIG += c++17 console
-QMAKE_CXXFLAGS += -O0 -Wfatal-errors -Wall -Wextra
+QMAKE_CXXFLAGS += -O2 -Wfatal-errors -Wall -Wextra
 CONFIG -= app_bundle
 
 # You can make your code fail to compile if it uses deprecated APIs.

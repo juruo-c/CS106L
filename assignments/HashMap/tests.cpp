@@ -1810,7 +1810,7 @@ int A_benchmark_insert_erase() {
         {
             auto my_start = clock_type::now();
 
-            HashMap<int, int, decltype(good_hash_function)> my_map(5000000, good_hash_function);
+            HashMap<int, int, decltype(good_hash_function)> my_map(size, good_hash_function);
             for (int element : million) {
                 my_map.insert({element, element});
             }
@@ -1873,7 +1873,7 @@ int B_benchmark_find() {
         size_t my_map_result, std_map_result;
         {
 
-            HashMap<int, int, decltype(good_hash_function)> my_map(5000000, good_hash_function);
+            HashMap<int, int, decltype(good_hash_function)> my_map(size, good_hash_function);
             for (size_t i = 0; i < million.size(); i += 2) {
                 int element = million[i];
                 my_map.insert({element, element});
@@ -1939,7 +1939,7 @@ int C_benchmark_iterate() {
         std::shuffle(million.begin(), million.end(), rng);
         size_t my_map_result, std_map_result;
         {
-            HashMap<int, int, decltype(good_hash_function)> my_map(5000000, good_hash_function);
+            HashMap<int, int, decltype(good_hash_function)> my_map(size, good_hash_function);
             for (int element : million) {
                 my_map.insert({element, element});
             }

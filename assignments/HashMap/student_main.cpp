@@ -17,23 +17,29 @@ int student_main() {
 }
 
 void test() {
-    HashMap<string, int> map(5);
-    cout << "Hello from your past and current lecturers!" << endl;
-    auto [anna_iter, anna_found] = map.insert({"Anna", 2});
-    map.insert({"Avery", 3});
-    map.insert({"Nikhil", 4});
-    map.insert({"Ethan", 5});
-    map.debug();
-    map.rehash(2);
-    map.debug();
+    HashMap<int, std::string> reverse;
+    reverse.insert({3, "Avery"});
+    reverse.insert({2, "Anna"});
+    HashMap<std::string, int> map;
+    map.insert({"Avery", 4});
+//    cout << "Hello from your past and current lecturers!" << endl;
+//    auto [anna_iter, anna_found] = map.insert({"Anna", 2});
+//    map.insert({"Avery", 3});
+//    map.insert({"Nikhil", 4});
+//    map.insert({"Ethan", 5});
+//    map.debug();
+//    map.rehash(2);
+//    map.debug();
 
-    if (anna_found) map.erase(anna_iter);
-    auto ethan_iter = map.find("Ethan");
-    ethan_iter->second = 100;
-    map.debug();
+//    if (anna_found) map.erase(anna_iter);
+//    auto ethan_iter = map.find("Ethan");
+//    ethan_iter->second = 100;
+//    map.debug();
 
-    auto iter = ethan_iter;
-    ++iter;
-    iter->second = 200;
-    map.debug();
+//    auto iter = ethan_iter;
+//    ++iter;
+//    iter->second = 200;
+//    map.debug();
+
+    cout << "A" << map << 3 << reverse << '\n' << map << map << std::endl;
 }
